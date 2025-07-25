@@ -2,7 +2,7 @@ package com.example.simpleloginapi.user.service;
 
 import org.springframework.stereotype.Service;
 
-import com.example.simpleloginapi.user.dto.LoginResponseDto;
+import com.example.simpleloginapi.user.dto.SignupResponseDto;
 import com.example.simpleloginapi.user.entity.User;
 import com.example.simpleloginapi.user.entity.UserRole;
 import com.example.simpleloginapi.user.entity.UserRoles;
@@ -17,7 +17,7 @@ public class AuthService {
 	private final AuthRepository authRepository;
 	private final UserRolesRepository userRolesRepository;
 
-	public LoginResponseDto signup(String username, String password, String nickname) {
+	public SignupResponseDto signup(String username, String password, String nickname) {
 		User user = User.builder()
 			.username(username)
 			.nickname(nickname)
@@ -34,6 +34,6 @@ public class AuthService {
 		User saved = authRepository.save(user);
 		userRolesRepository.save(userRoles);
 
-		return new LoginResponseDto(saved.getUsername(), saved.getNickname(), saved.getUserRoles());
+		return new SignupResponseDto(saved.getUsername(), saved.getNickname(), saved.getUserRoles());
 	}
 }

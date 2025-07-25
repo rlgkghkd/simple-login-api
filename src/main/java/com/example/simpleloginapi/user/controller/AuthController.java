@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.simpleloginapi.user.dto.LoginRequestDto;
-import com.example.simpleloginapi.user.dto.LoginResponseDto;
+import com.example.simpleloginapi.user.dto.SignupRequestDto;
+import com.example.simpleloginapi.user.dto.SignupResponseDto;
 import com.example.simpleloginapi.user.service.AuthService;
 
 import lombok.RequiredArgsConstructor;
@@ -19,10 +19,10 @@ public class AuthController {
 	private final AuthService authService;
 
 	@PostMapping("/signup")
-	public ResponseEntity<LoginResponseDto> signup(
-		@RequestBody LoginRequestDto loginRequestDto
+	public ResponseEntity<SignupResponseDto> signup(
+		@RequestBody SignupRequestDto signupRequestDto
 	) {
-		return ResponseEntity.ok(authService.signup(loginRequestDto.getUsername(), loginRequestDto.getPassword(), loginRequestDto.getNickname()));
+		return ResponseEntity.ok(authService.signup(signupRequestDto.getUsername(), signupRequestDto.getPassword(), signupRequestDto.getNickname()));
 	}
 
 }
