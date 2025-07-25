@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.example.simpleloginapi.user.entity.User;
 
 @Repository
-public interface LoginRepository extends JpaRepository<User, Long> {
+public interface AuthRepository extends JpaRepository<User, Long> {
 }

@@ -11,10 +11,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor
+@Getter
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,10 +33,13 @@ public class User {
 	private List<UserRoles> userRoles = new ArrayList<>();
 
 	@Builder
-	public User(String username, String password, String nickname, List<UserRoles> userRoles) {
+	public User(String username, String password, String nickname, UserRoles userRoles) {
 		this.username = username;
 		this.password = password;
 		this.nickname = nickname;
-		this.userRoles = userRoles;
+	}
+
+	public void addUserRole (UserRoles userRoles) {
+		this.userRoles.add(userRoles);
 	}
 }
