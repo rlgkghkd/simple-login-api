@@ -39,7 +39,7 @@ public class User {
 		this.nickname = nickname;
 	}
 
-	public void addUserRole (UserRoles userRoles) {
+	public void addUserRoles(UserRoles userRoles) {
 		this.userRoles.add(userRoles);
 	}
 }
