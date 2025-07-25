@@ -2,7 +2,7 @@ package com.example.simpleloginapi.user.dto;
 
 import java.util.List;
 
-import com.example.simpleloginapi.user.entity.UserRoles;
+import com.example.simpleloginapi.user.entity.UserRoleAssignment;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 public class SignupResponseDto {
 	private String username;
 	private String nickname;
-	private List<UserRoles> roles;
+	private List<UserRoleAssignment> roles;
 }

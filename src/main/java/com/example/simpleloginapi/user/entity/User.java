@@ -30,16 +30,16 @@ public class User {
 	private String nickname;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<UserRoles> userRoles = new ArrayList<>();
+	private List<UserRoleAssignment> userRoles = new ArrayList<>();
 
 	@Builder
-	public User(String username, String password, String nickname, UserRoles userRoles) {
+	public User(String username, String password, String nickname, UserRoleAssignment userRoleAssignment) {
 		this.username = username;
 		this.password = password;
 		this.nickname = nickname;
 	}
 
-	public void addUserRoles(UserRoles userRoles) {
-		this.userRoles.add(userRoles);
+	public void addAssignment(UserRoleAssignment userRoleAssignment) {
+		this.userRoles.add(userRoleAssignment);
 	}
 }

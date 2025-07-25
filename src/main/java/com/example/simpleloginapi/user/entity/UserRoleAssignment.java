@@ -1,6 +1,5 @@
 package com.example.simpleloginapi.user.entity;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -13,7 +12,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor
-public class UserRoles {
+public class UserRoleAssignment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -25,7 +24,7 @@ public class UserRoles {
 	private UserRole userRole;
 
 	@Builder
-	public UserRoles(User user, UserRole userRole) {
+	public UserRoleAssignment(User user, UserRole userRole) {
 		this.user = user;
 		this.userRole = userRole;
 	}
