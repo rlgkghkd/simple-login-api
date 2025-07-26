@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @Getter
+@Table(name = "users")
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,16 +32,16 @@ public class User {
 	private String nickname;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<UserRoleAssignment> userRoles = new ArrayList<>();
+	private List<UserRoleAssignment> userRoleAssignments = new ArrayList<>();
 
 	@Builder
-	public User(String username, String password, String nickname, UserRoleAssignment userRoleAssignment) {
+	public User(String username, String password, String nickname) {
 		this.username = username;
 		this.password = password;
 		this.nickname = nickname;
 	}
 
 	public void addAssignment(UserRoleAssignment userRoleAssignment) {
-		this.userRoles.add(userRoleAssignment);
+		this.userRoleAssignments.add(userRoleAssignment);
 	}
 }

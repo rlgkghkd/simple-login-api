@@ -1,16 +1,15 @@
 package com.example.simpleloginapi.user.dto;
 
-import java.util.List;
+import com.example.simpleloginapi.user.entity.UserRole;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-public class SignupResponseDto {
-	private String username;
-	private String nickname;
-	private List<RoleDto> roles;
+public class AssignUserRoleRequestDto {
+
+	private UserRole userRole;
 }

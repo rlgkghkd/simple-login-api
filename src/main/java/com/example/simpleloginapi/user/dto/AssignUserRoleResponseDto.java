@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class SignupResponseDto {
+public class AssignUserRoleResponseDto {
 	private String username;
 	private String nickname;
 	private List<RoleDto> roles;

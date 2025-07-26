@@ -1,12 +1,10 @@
 package com.example.simpleloginapi.jwt.utils;
 
-import com.example.simpleloginapi.user.entity.UserRole;
+import com.example.simpleloginapi.user.entity.UserRoleAssignment;
+
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,6 +16,7 @@ import org.springframework.stereotype.Component;
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
+import java.util.List;
 
 @Component
 @Slf4j
@@ -45,13 +44,15 @@ public class JwtUtil {
         key = Keys.hmacShaKeyFor(bytes);
     }
 
-    public String createToken(String username, UserRole role) {
+    public String createToken(String username, List<UserRoleAssignment> roles) {
         Date now = new Date();
         Date validity = new Date(now.getTime() + this.tokenValidityTime);
 
+		List<String> roleNames = roles.stream().map(userRoleAssignment -> userRoleAssignment.getUserRole().getAuthority()).toList();
+
         return Jwts.builder()
 			.setSubject(username)
-			.claim(AUTHORIZATION_KEY, role)
+			.claim(AUTHORIZATION_KEY, roleNames)
 			.signWith(key, signatureAlgorithm)
 			.setIssuedAt(now)
 			.setExpiration(validity)
@@ -66,20 +67,8 @@ public class JwtUtil {
         return null;
     }
 
-    public boolean validateToken(String token) {
-        try {
-			Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-			return true;
-        } catch (SecurityException | MalformedJwtException e) {
-			log.error("JWT 서명 오류");
-        } catch (ExpiredJwtException e) {
-			log.error("만료된 토큰");
-		} catch (UnsupportedJwtException e) {
-			log.error("지원하지 않는 토큰");
-		} catch (IllegalArgumentException e) {
-			log.error("잘못된 토큰");
-		}
-        return false;
+    public void validateToken(String token) {
+		Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
     }
 
     // 6. 토큰에서 사용자 정보 가져오기
