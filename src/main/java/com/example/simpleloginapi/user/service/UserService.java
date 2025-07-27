@@ -3,24 +3,18 @@ package com.example.simpleloginapi.user.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.management.relation.Role;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.example.simpleloginapi.common.exception.CustomException;
 import com.example.simpleloginapi.user.dto.AssignUserRoleResponseDto;
 import com.example.simpleloginapi.user.dto.RoleDto;
 import com.example.simpleloginapi.user.entity.User;
-import com.example.simpleloginapi.user.entity.UserDetailImpl;
 import com.example.simpleloginapi.user.entity.UserRole;
 import com.example.simpleloginapi.user.entity.UserRoleAssignment;
-import com.example.simpleloginapi.user.exception.AuthErrors;
 import com.example.simpleloginapi.user.exception.UserErrors;
 import com.example.simpleloginapi.user.repository.UserRepository;
+import com.example.simpleloginapi.user.repository.UserRolesAssignmentRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final UserRolesAssignmentRepository userRolesAssignmentRepository;
 
 	public User createUser(String username, String password, String nickname) {
 		if(userRepository.existsByUsername(username)) {
@@ -56,11 +51,14 @@ public class UserService {
 	}
 
 	public void createUserRoleAssignment(User user, UserRole userRole){
-		UserRoleAssignment userRoleAssignment = UserRoleAssignment.builder()
-			.user(user)
-			.userRole(userRole)
-			.build();
+		Boolean searchRole = userRolesAssignmentRepository.existsByUserAndUserRole(user, userRole);
+		if (!searchRole) {
+			UserRoleAssignment userRoleAssignment = UserRoleAssignment.builder()
+				.user(user)
+				.userRole(userRole)
+				.build();
 
-		user.addAssignment(userRoleAssignment);
+			user.addAssignment(userRoleAssignment);
+		}
 	}
 }
