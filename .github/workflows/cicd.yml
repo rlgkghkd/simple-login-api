@@ -62,6 +62,7 @@ jobs:
             echo "JAR_FILE_NAME: ${{ env.JAR_FILE_NAME }}"
 
             echo "Stopping existing application..."
+            set +e # Temporarily disable set -e
             if [ -f "${{ env.EC2_APP_PATH }}/app.pid" ]; then
                 PID=$(cat "${{ env.EC2_APP_PATH }}/app.pid")
                 if [ -n "$PID" ]; then
@@ -86,6 +87,7 @@ jobs:
                     echo "No running Java application found."
                 fi
             fi
+            set -e # Re-enable set -e
 
             echo "Creating application directory if it doesn't exist..."
             mkdir -p ${{ env.EC2_APP_PATH }}
