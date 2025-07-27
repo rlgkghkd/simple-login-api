@@ -53,15 +53,42 @@ jobs:
         port: 22
         script_stop: true
         script: |
-            script: |
+            echo "--- Starting SSH Script ---"
+            echo "Current directory on EC2: $(pwd)"
+            echo "EC2_APP_PATH: ${{ env.EC2_APP_PATH }}"
+            echo "JAR_FILE_NAME: ${{ env.JAR_FILE_NAME }}"
+
             echo "Stopping existing application..."
-            pkill -f 'java -jar' || true
-            sleep 5 # 프로세스 종료 대기
+            pkill -f 'java -jar'
+            PKILL_EXIT_CODE=$?
+            echo "pkill exit code: $PKILL_EXIT_CODE"
+            if [ $PKILL_EXIT_CODE -eq 0 ]; then
+                echo "Existing application terminated."
+                sleep 5 # 프로세스 종료 대기
+            elif [ $PKILL_EXIT_CODE -eq 1 ]; then
+                echo "No existing application found to terminate."
+            else
+                echo "pkill command failed with unexpected exit code: $PKILL_EXIT_CODE"
+            fi
 
             echo "Creating application directory if it doesn't exist..."
             mkdir -p ${{ env.EC2_APP_PATH }}
+            MKDIR_EXIT_CODE=$?
+            echo "mkdir exit code: $MKDIR_EXIT_CODE"
+            if [ $MKDIR_EXIT_CODE -ne 0 ]; then
+                echo "Error creating directory. Exiting."
+                exit $MKDIR_EXIT_CODE
+            fi
 
             echo "Starting new application..."
             nohup java -jar ${{ env.EC2_APP_PATH }}/${{ env.JAR_FILE_NAME }} > ${{ env.EC2_APP_PATH }}/app.log 2>&1 &
+            NOHUP_EXIT_CODE=$?
+            echo "nohup command exit code: $NOHUP_EXIT_CODE"
+            if [ $NOHUP_EXIT_CODE -ne 0 ]; then
+                echo "Error starting application with nohup. Exiting."
+                exit $NOHUP_EXIT_CODE
+            fi
+
             sleep 1 # 백그라운드 프로세스 분리 대기
             echo "Deployment complete!"
+            echo "--- SSH Script Finished ---"
