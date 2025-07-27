@@ -59,7 +59,7 @@ jobs:
             echo "JAR_FILE_NAME: ${{ env.JAR_FILE_NAME }}"
 
             echo "Stopping existing application..."
-            pkill -f 'java -jar'
+            pkill -f 'java -jar' || true
             PKILL_EXIT_CODE=$?
             echo "pkill exit code: $PKILL_EXIT_CODE"
             if [ $PKILL_EXIT_CODE -eq 0 ]; then
