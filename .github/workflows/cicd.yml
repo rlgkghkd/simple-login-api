@@ -54,8 +54,7 @@ jobs:
         host: ${{ secrets.EC2_HOST }}
         username: ${{ secrets.EC2_USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
-        script:
-          - | # EC2에 접속하여 실행할 스크립트
+        script: | # EC2에 접속하여 실행할 스크립트
             echo "Stopping existing application..."
             # 기존에 실행 중인 Spring Boot 애플리케이션 종료
             # pkill -f "java -jar"는 모든 java -jar 프로세스를 종료하므로, 다른 java 앱이 있다면 주의
