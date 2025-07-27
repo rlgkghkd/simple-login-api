@@ -60,7 +60,6 @@ jobs:
             mkdir -p ${{ env.EC2_APP_PATH }}
 
             echo "Starting new application..."
-            # nohup을 사용하여 세션이 끊겨도 계속 실행되도록 함
-            # 출력을 app.log 파일로 리디렉션
-            nohup java -jar ${{ env.EC2_APP_PATH }}/${{ env.JAR_FILE_NAME }} > ${{ env.EC2_APP_PATH }}/app.log 2>&1 &
+            # 새 애플리케이션 백그라운드에서 실행
+            nohup java -jar ${{ env.EC2_APP_PATH }}/${{ env.JAR_FILE_NAME }} > ${{ env.EC2_APP_PATH }}/app.log 2>&1 & disown
             echo "Deployment complete!"
