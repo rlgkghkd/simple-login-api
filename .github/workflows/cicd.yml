@@ -92,13 +92,3 @@ jobs:
             sleep 5 # 백그라운드 프로세스 분리 대기 시간을 충분히 줌
             echo "Deployment complete!"
             echo "--- SSH Script Finished ---"
-            NOHUP_EXIT_CODE=$?
-            echo "nohup command exit code: $NOHUP_EXIT_CODE"
-            if [ $NOHUP_EXIT_CODE -ne 0 ]; then
-                echo "Error starting application with nohup. Exiting."
-                exit $NOHUP_EXIT_CODE
-            fi
-
-            sleep 5 # 백그라운드 프로세스 분리 대기 시간을 충분히 줌
-            echo "Deployment complete!"
-            echo "--- SSH Script Finished ---"
