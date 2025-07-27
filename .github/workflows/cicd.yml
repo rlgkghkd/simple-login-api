@@ -81,7 +81,7 @@ jobs:
             fi
 
             echo "Starting new application..."
-            nohup java -jar ${{ env.EC2_APP_PATH }}/${{ env.JAR_FILE_NAME }} > ${{ env.EC2_APP_PATH }}/app.log 2>&1 &
+            nohup java -jar ${{ env.EC2_APP_PATH }}/${{ env.JAR_FILE_NAME }} < /dev/null > ${{ env.EC2_APP_PATH }}/app.log 2>&1 &
             NOHUP_EXIT_CODE=$?
             echo "nohup command exit code: $NOHUP_EXIT_CODE"
             if [ $NOHUP_EXIT_CODE -ne 0 ]; then
@@ -89,6 +89,6 @@ jobs:
                 exit $NOHUP_EXIT_CODE
             fi
 
-            sleep 1 # 백그라운드 프로세스 분리 대기
+            sleep 5 # 백그라운드 프로세스 분리 대기 시간을 충분히 줌
             echo "Deployment complete!"
             echo "--- SSH Script Finished ---"
