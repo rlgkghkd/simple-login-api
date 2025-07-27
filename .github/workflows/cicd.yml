@@ -53,26 +53,15 @@ jobs:
         port: 22
         script_stop: true
         script: |
-            set -e # Any command failure will exit the script immediately
-
+            script: |
             echo "Stopping existing application..."
-            # Find and kill existing Java processes
-            PIDS=$(ps -ef | grep "java -jar" | grep -v grep | awk '{print $2}')
-            if [ -n "$PIDS" ]; then
-                echo "Found PIDs: $PIDS"
-                for PID in $PIDS; do
-                    echo "Killing PID: $PID"
-                    kill -9 $PID || true # Force kill, continue on error
-                done
-                sleep 5 # Give time for processes to terminate
-            else
-                echo "No existing Java application found."
-            fi
+            pkill -f 'java -jar' || true
+            sleep 5 # 프로세스 종료 대기
 
             echo "Creating application directory if it doesn't exist..."
             mkdir -p ${{ env.EC2_APP_PATH }}
 
             echo "Starting new application..."
-            # Start new application in background
-            nohup java -jar ${{ env.EC2_APP_PATH }}/${{ env.JAR_FILE_NAME }} > ${{ env.EC2_APP_PATH }}/app.log 2>&1 & disown
+            nohup java -jar ${{ env.EC2_APP_PATH }}/${{ env.JAR_FILE_NAME }} > ${{ env.EC2_APP_PATH }}/app.log 2>&1 &
+            sleep 1 # 백그라운드 프로세스 분리 대기
             echo "Deployment complete!"
