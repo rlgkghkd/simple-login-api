@@ -85,7 +85,7 @@ jobs:
                 else
                     echo "No running Java application found."
                 fi
-            fi
+            fi || true
 
             echo "Creating application directory if it doesn't exist..."
             mkdir -p ${{ env.EC2_APP_PATH }}
