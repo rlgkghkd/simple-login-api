@@ -62,12 +62,17 @@ jobs:
             echo "JAR_FILE_NAME: ${{ env.JAR_FILE_NAME }}"
 
             echo "Stopping existing application..."
-            if [ -f "${{ env.EC2_APP_PATH }}/app.pid" ] || true; then
+            if [ -f "${{ env.EC2_APP_PATH }}/app.pid" ]; then
                 PID=$(cat "${{ env.EC2_APP_PATH }}/app.pid")
-                echo "Found PID file. Killing process with PID: $PID"
-                kill -9 $PID || true
-                sleep 5
-                rm -f "${{ env.EC2_APP_PATH }}/app.pid"
+                if [ -n "$PID" ]; then
+                    echo "Found PID file. Killing process with PID: $PID"
+                    kill -9 $PID || true
+                    sleep 5
+                    rm -f "${{ env.EC2_APP_PATH }}/app.pid"
+                else
+                    echo "PID file is empty. Removing it."
+                    rm -f "${{ env.EC2_APP_PATH }}/app.pid"
+                fi
             else
                 echo "No PID file found. Checking for running Java processes..."
                 PIDS=$(ps -ef | grep "java -jar" | grep -v grep | awk '{print $2}')
