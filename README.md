@@ -13,28 +13,6 @@
 
 ## 프로젝트 실행 방법
 
-### 로컬에서 실행
-
-1.  **프로젝트 클론:**
-    ```bash
-    git clone <YOUR_REPOSITORY_URL>
-    cd SimpleLoginAPI
-    ```
-
-2.  **Gradle 빌드:**
-    ```bash
-    ./gradlew bootJar
-    ```
-
-3.  **애플리케이션 실행:**
-    ```bash
-    java -jar build/libs/SimpleLoginAPI-0.0.1-SNAPSHOT.jar # 실제 JAR 파일 이름으로 변경
-    ```
-
-    애플리케이션은 기본적으로 `8080` 포트에서 실행됩니다.
-
-### AWS EC2에 배포 (CI/CD)
-
 이 프로젝트는 GitHub Actions를 사용하여 AWS EC2 인스턴스에 자동 배포되도록 설정되어 있습니다.
 
 **Public Ipv4:** `13.125.174.54`
