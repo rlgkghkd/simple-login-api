@@ -37,20 +37,9 @@
 
 이 프로젝트는 GitHub Actions를 사용하여 AWS EC2 인스턴스에 자동 배포되도록 설정되어 있습니다.
 
-**필수 설정:**
+**Public Ipv4:** `13.125.174.54`
 
-1.  **AWS EC2 인스턴스 준비:**
-    *   Java 17이 설치되어 있어야 합니다.
-    *   인바운드 규칙에 `SSH (Port 22)`와 `Custom TCP (Port 8080)`가 허용되어 있어야 합니다.
-
-2.  **GitHub Repository Secrets 설정:**
-    GitHub 리포지토리의 `Settings` -> `Secrets and variables` -> `Actions`에서 다음 Secret을 추가해야 합니다.
-    *   `SSH_PRIVATE_KEY`: EC2 인스턴스 접속에 사용되는 `.pem` 파일의 전체 내용 (`-----BEGIN...` 부터 `-----END...` 까지).
-    *   `EC2_HOST`: EC2 인스턴스의 퍼블릭 IP 주소 또는 퍼블릭 DNS.
-    *   `EC2_USER`: EC2 인스턴스에 접속할 사용자 이름 (예: `ec2-user`, `ubuntu`).
-
-3.  **CI/CD 워크플로우:**
-    `.github/workflows/cicd.yml` 파일에 정의된 워크플로우는 `dev` 브랜치에 푸시될 때마다 자동으로 빌드 및 배포를 수행합니다.
+**Public DNS**`ec2-13-125-174-54.ap-northeast-2.compute.amazonaws.com`
 
 ## API 엔드포인트
 
