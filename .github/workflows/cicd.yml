@@ -62,32 +62,8 @@ jobs:
             echo "JAR_FILE_NAME: ${{ env.JAR_FILE_NAME }}"
 
             echo "Stopping existing application..."
-            set +e # Temporarily disable set -e
-            if [ -f "${{ env.EC2_APP_PATH }}/app.pid" ]; then
-                PID=$(cat "${{ env.EC2_APP_PATH }}/app.pid")
-                if [ -n "$PID" ]; then
-                    echo "Found PID file. Killing process with PID: $PID"
-                    kill -9 $PID || true
-                    sleep 5
-                    rm -f "${{ env.EC2_APP_PATH }}/app.pid"
-                else
-                    echo "PID file is empty. Removing it."
-                    rm -f "${{ env.EC2_APP_PATH }}/app.pid"
-                fi
-            else
-                echo "No PID file found. Checking for running Java processes..."
-                PIDS=$(ps -ef | grep "java -jar" | grep -v grep | awk '{print $2}')
-                if [ -n "$PIDS" ]; then
-                    echo "Found running Java processes: $PIDS. Killing them."
-                    for PID in $PIDS; do
-                        kill -9 $PID || true
-                    done
-                    sleep 5
-                else
-                    echo "No running Java application found."
-                fi
-            fi
-            set -e # Re-enable set -e
+            pkill -f 'java -jar' || true
+            sleep 5 # 프로세스 종료 대기
 
             echo "Creating application directory if it doesn't exist..."
             mkdir -p ${{ env.EC2_APP_PATH }}
@@ -99,7 +75,7 @@ jobs:
             fi
 
             echo "Starting new application..."
-            setsid nohup java -jar ${{ env.EC2_APP_PATH }}/${{ env.JAR_FILE_NAME }} < /dev/null > ${{ env.EC2_APP_PATH }}/app.log 2>&1 & echo $! > "${{ env.EC2_APP_PATH }}/app.pid"
+            setsid nohup java -jar ${{ env.EC2_APP_PATH }}/${{ env.JAR_FILE_NAME }} < /dev/null > ${{ env.EC2_APP_PATH }}/app.log 2>&1 &
             NOHUP_EXIT_CODE=$?
             echo "nohup command exit code: $NOHUP_EXIT_CODE"
             if [ $NOHUP_EXIT_CODE -ne 0 ]; then
@@ -109,3 +85,4 @@ jobs:
 
             echo "Deployment complete!"
             echo "--- SSH Script Finished ---"
+
