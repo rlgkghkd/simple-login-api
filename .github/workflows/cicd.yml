@@ -53,6 +53,9 @@ jobs:
         port: 22
         script_stop: true
         script: |
+            exec > /tmp/deploy_script_debug.log 2>&1 # Redirect all output to a debug log file
+            set -x # Enable command tracing
+
             echo "--- Starting SSH Script ---"
             echo "Current directory on EC2: $(pwd)"
             echo "EC2_APP_PATH: ${{ env.EC2_APP_PATH }}"
@@ -81,7 +84,7 @@ jobs:
             fi
 
             echo "Starting new application..."
-            nohup java -jar ${{ env.EC2_APP_PATH }}/${{ env.JAR_FILE_NAME }} < /dev/null > ${{ env.EC2_APP_PATH }}/app.log 2>&1 &
+            setsid nohup java -jar ${{ env.EC2_APP_PATH }}/${{ env.JAR_FILE_NAME }} < /dev/null > ${{ env.EC2_APP_PATH }}/app.log 2>&1 &
             NOHUP_EXIT_CODE=$?
             echo "nohup command exit code: $NOHUP_EXIT_CODE"
             if [ $NOHUP_EXIT_CODE -ne 0 ]; then
@@ -89,6 +92,5 @@ jobs:
                 exit $NOHUP_EXIT_CODE
             fi
 
-            sleep 5 # 백그라운드 프로세스 분리 대기 시간을 충분히 줌
             echo "Deployment complete!"
             echo "--- SSH Script Finished ---"
