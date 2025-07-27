@@ -81,4 +81,5 @@ jobs:
             # nohup을 사용하여 세션이 끊겨도 계속 실행되도록 함
             # > /dev/null 2>&1 & 는 모든 출력을 무시하고 백그라운드에서 실행
             nohup java -jar ${{ env.EC2_APP_PATH }}/${{ env.JAR_FILE_NAME }} > /dev/null 2>&1 &
+            sleep 1 # nohup 프로세스가 완전히 분리될 시간을 줌
             echo "Deployment complete!"
