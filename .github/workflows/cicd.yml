@@ -42,6 +42,7 @@ jobs:
         port: 22
         source: "./build/libs/${{ env.JAR_FILE_NAME }}"
         target: "${{ env.EC2_APP_PATH }}/"
+        strip_components: 2
 
     - name: SSH Commands and Start Application
       uses: appleboy/ssh-action@v0.1.6
@@ -50,16 +51,21 @@ jobs:
         username: ${{ secrets.EC2_USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: 22
+        script_stop: true
         script: |
             echo "Stopping existing application..."
-            pkill -f 'java -jar' || true # 모든 java -jar 프로세스 종료
-            sleep 5 # 프로세스 종료 대기
+            PID=$(ps -ef | grep "java -jar" | grep -v grep | awk '{print $2}')
+            if [ -n "$PID" ]; then
+                echo "Killing existing application with PID: $PID"
+                kill -9 $PID || true # 강제 종료
+                sleep 5
+            else
+                echo "No existing application found."
+            fi
 
             echo "Creating application directory if it doesn't exist..."
             mkdir -p ${{ env.EC2_APP_PATH }}
 
             echo "Starting new application..."
-            # 새 애플리케이션 백그라운드에서 실행
             nohup java -jar ${{ env.EC2_APP_PATH }}/${{ env.JAR_FILE_NAME }} > ${{ env.EC2_APP_PATH }}/app.log 2>&1 & disown
-            sleep 1 # 백그라운드 프로세스 분리 대기
             echo "Deployment complete!"
