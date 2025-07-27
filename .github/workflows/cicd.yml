@@ -62,7 +62,7 @@ jobs:
             echo "JAR_FILE_NAME: ${{ env.JAR_FILE_NAME }}"
 
             echo "Stopping existing application..."
-            if [ -f "${{ env.EC2_APP_PATH }}/app.pid" ]; then
+            if [ -f "${{ env.EC2_APP_PATH }}/app.pid" ] || true; then
                 PID=$(cat "${{ env.EC2_APP_PATH }}/app.pid")
                 echo "Found PID file. Killing process with PID: $PID"
                 kill -9 $PID || true
