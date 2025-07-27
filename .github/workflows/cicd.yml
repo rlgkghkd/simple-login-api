@@ -7,7 +7,7 @@ on:
 
 env:
   JAVA_VERSION: '17' # Java 버전
-  EC2_APP_PATH: '/home/ec2-user/app/build/libs' # EC2에 애플리케이션을 배포할 경로
+  EC2_APP_PATH: '/home/ec2-user/app' # EC2에 애플리케이션을 배포할 경로
   JAR_FILE_NAME: 'SimpleLoginAPI-0.0.1-SNAPSHOT.jar' # 빌드될 JAR 파일 이름 (실제 이름으로 변경 필요)
 
 jobs:
@@ -41,7 +41,7 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: 22
         source: "./build/libs/${{ env.JAR_FILE_NAME }}"
-        target: "${{ env.EC2_APP_PATH }}/"
+        target: "${{ env.EC2_APP_PATH }}"
 
     - name: SSH Commands and Start Application
       uses: appleboy/ssh-action@v0.1.6
