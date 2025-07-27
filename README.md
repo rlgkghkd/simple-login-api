@@ -38,6 +38,8 @@
         }
         ```
     *   **Response:** `SignupResponseDto`
+    * 기본적으로 생성된 User 는 USER 역활을 부여받습니다.
+    * ADMIN 계정이 필요한 작업은 아래의 초기 관리자 계정을 사용하십시오.
 
 *   **로그인 (Login)**
     *   `POST /login`
